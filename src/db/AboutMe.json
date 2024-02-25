@@ -1,0 +1,102 @@
+[
+  {
+  "question": "My name is...",
+  "options": [
+    { "option": "Maksim", "id": "a402396b-f103-46ab-8eb7-72f61c4a39ac" },
+    { "option": "Mike", "id": "e11790bd-35b0-4b32-a064-7979e72c6068" },
+    { "option": "Elon", "id": "fe5acad8-da9b-46ae-95c8-077ca92bb3be" },
+    { "option": "Duke", "id": "2654735a-41c2-4772-96b2-d0cfb0e082f9" }
+  ],
+  "correctAnswers": ["a402396b-f103-46ab-8eb7-72f61c4a39ac"]
+  },
+  {
+    "question": "I work at ... company",
+    "options": [
+      { "option": "Rostelecom", "id": "33a24cbe-46b7-49a0-a5d7-2928fab7b722" },
+      { "option": "Yandex", "id": "4f014ecf-cef3-4381-b279-50abbd2f3c14" },
+      { "option": "Ozon", "id": "f3a4e9b7f-167c-4c84-8d78-47f856518155" },
+      { "option": "Avito", "id": "e9b7090a-5aa7-4a08-b27b-1b91e716c5b0" }
+    ],
+    "correctAnswers": ["33a24cbe-46b7-49a0-a5d7-2928fab7b722"]
+  },
+  {
+    "question": "What frameworks do I know?",
+    "options": [
+      { "option": "React", "id": "14597da5-6d3e-4017-9b6e-c72647592bec" },
+      { "option": "Nest", "id": "f2880d9b-da69-494d-9e7b-3bb998b1cf2d" },
+      { "option": "Next", "id": "fa24074a-0b56-421f-b82b-1cb02ee7941f" },
+      { "option": "Angular", "id": "62243a83-6352-446a-bcdd-183a9fbbae2f" }
+    ],
+    "correctAnswers": ["14597da5-6d3e-4017-9b6e-c72647592bec", "f2880d9b-da69-494d-9e7b-3bb998b1cf2d", "fa24074a-0b56-421f-b82b-1cb02ee7941f"]
+  },
+  {
+    "question": "How old am I?",
+    "options": [
+      { "option": "34", "id": "b071ba6d-1ba6-42f4-a22a-d634a7e536ba" },
+      { "option": "36", "id": "8f311134-3460-475d-9ce8-a4e3b0c3bbb0" },
+      { "option": "29", "id": "8da7d8f1-0365-4f67-a607-5981774cb435" },
+      { "option": "18 ^_^", "id": "fe94735e-2879-4498-aee7-0f94b7525f4f" }
+    ],
+    "correctAnswers": ["b071ba6d-1ba6-42f4-a22a-d634a7e536ba"]
+  },
+  {
+    "question": "What city do I live in?",
+    "options": [
+      { "option": "Innopolis", "id": "20b1a20c-a191-43c3-8814-32071bc9cb79" },
+      { "option": "Kazan", "id": "1a6fb63d-e1df-4748-9cf2-b823f000015a" },
+      { "option": "Moscow", "id": "5c59e714-309f-4a4b-9b60-f923e640f12f" },
+      { "option": "Limassol", "id": "8853b442-8b3c-416c-bbae-e0c470668f41" }
+    ],
+    "correctAnswers": ["20b1a20c-a191-43c3-8814-32071bc9cb79"]
+  },
+  {
+    "question": "What programming languages do I use",
+    "options": [
+      { "option": "SQL", "id": "67e1a108-ef17-412b-b7c3-38cc61704574" },
+      { "option": "JavaScript", "id": "207325e1-eddc-4379-a763-8d53244dae3d" },
+      { "option": "HTML", "id": "c691ceb3-0424-42a5-8dca-d17fce4148b9" },
+      { "option": "Go", "id": "c431d615-fe68-43c1-b8be-1bd6d47ffd25" }
+    ],
+    "correctAnswers": ["67e1a108-ef17-412b-b7c3-38cc61704574", "207325e1-eddc-4379-a763-8d53244dae3d"]
+  },
+  {
+    "question": "I am ...",
+    "options": [
+      { "option": "Frontend", "id": "a0c4e1b7-b2af-469f-972f-742bea37ba2b" },
+      { "option": "Backend", "id": "eb447279-965b-47c4-9280-7da990a1e537" },
+      { "option": "Fullstack", "id": "7b3b4d04-298f-4afe-bbfe-7d844ce19ff1" },
+      { "option": "Mobile", "id": "2e2513a8f-0eae-49e1-b2bd-0597e01d6c10" }
+    ],
+    "correctAnswers": ["7b3b4d04-298f-4afe-bbfe-7d844ce19ff1"]
+  },
+  {
+    "question": "Why did you decide to change jobs?",
+    "options": [
+      { "option": "I can't realize my potential.", "id": "9ca071d1-a9fa-4ded-87ab-acb7f22cba2e" },
+      { "option": "I want a lot of money.", "id": "f01d070b-03e1-47be-9403-c287b2fc2a9c" },
+      { "option": "There are problems with the boss.", "id": "e0d0eef5-e0b0-422f-b937-ff2b651b9be7" },
+      { "option": "I am lazy.", "id": "2200854b-da0c-4d63-bc6f-f82966e2533d" }
+    ],
+    "correctAnswers": ["9ca071d1-a9fa-4ded-87ab-acb7f22cba2e"]
+  },
+  {
+    "question": "Which university I graduated from?",
+    "options": [
+      { "option": "UGNTU", "id": "d689025f-6196-436d-aad5-436b7b5c2d8d" },
+      { "option": "MGU", "id": "96f02025-5106-481a-8586-4c6fb8aeb57a" },
+      { "option": "ITMO", "id": "82841e93-6d03-48fa-8d59-ca1e76aaa781" },
+      { "option": "Bauman MSTU", "id": "64eb7a9a-653b-41b8-8867-bd1855fd324a" }
+    ],
+    "correctAnswers": ["d689025f-6196-436d-aad5-436b7b5c2d8d"]
+  },
+  {
+    "question": "Which programming school was I a mentor at?",
+    "options": [
+      { "option": "Vladilen Minin", "id": "f4dacaef-37fa-4724-8c8a-3710f989eee7" },
+      { "option": "Innopolis university", "id": "bfc6f41c-41fe-4ca7-aec5-6196eb12ede6" },
+      { "option": "Yandex Practicum", "id": "84ab0e38-4521-4dc4-8519-4db597e48e6a" },
+      { "option": "Hexlet", "id": "d5d0972d-d6b7-4206-8a73-947b12248741" }
+    ],
+    "correctAnswers": ["f4dacaef-37fa-4724-8c8a-3710f989eee7", "bfc6f41c-41fe-4ca7-aec5-6196eb12ede6"]
+  }
+]
