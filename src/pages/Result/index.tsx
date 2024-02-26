@@ -1,9 +1,8 @@
 import {currentRoute} from "./model";
+import ResultPage from "./page";
 
 const Result = () => {
-    return <div>
-        RESULT
-    </div>
+    return <ResultPage />;
 }
 
 export const ResultRoute = {

@@ -14,64 +14,59 @@ import {
 import {useUnit} from "effector-react/effector-react.umd";
 import {
     $currentQuestion,
-    $numberOfActiveQuestion, $quizContent,
-    $quizLength,
+    $isLastStep,
+    $numberOfActiveQuestion,
+    $quizContent,
     $quizName,
     $scoreQuiz,
     $userName
 } from "../../entities/quiz";
-import React, {useMemo} from "react";
-import {CheckCircle, RemoveCircle} from "@mui/icons-material";
+import React, {useEffect, useMemo} from "react";
 import Question from "../../components/Question";
 import * as model from "./model";
 import ButtonContainer from "../../components/ButtonContainer";
-import {Link} from "atomic-router-react";
-import {routes} from "../../shared/routing";
-
-const getIcon = (isTrue?: boolean) => {
-    switch (isTrue) {
-        case true:
-            return <CheckCircle color='success'/>
-        case false:
-            return <RemoveCircle color='error'/>
-        default:
-            return undefined
-    }
-}
+import {IQuestion} from "../../shared/api/quiz";
+import getAnswerIcon from "../../shared/lib/getAnswerIcon";
+import {useBeforeunload} from "react-beforeunload";
 
 const LastStep = () => {
-    // const resetSteps = useUnit(model.resetSteps);
-    // const resetTimer = useUnit(model.resetTimer);
-    // const resetTimerId = useUnit(model.resetTimerId);
-    // const timer = useUnit($timer);
+    const resetProgress = useUnit(model.resetProgressEvent);
+    const resetTimer = useUnit(model.resetTimerEvent);
+    const saveTimeBeforeReload = useUnit(model.saveTimeBeforeReloadEvent);
+    const saveProgressEvent = useUnit(model.saveProgressEvent);
+    const resetTimerId = useUnit(model.resetTimerIdEvent);
+    const restoreSavedTimer = useUnit(model.restoreSavedTimeEvent);
 
-    // useEffect(() => {
-    //     resetTimerId();
-    // }, []);
+    useBeforeunload(saveTimeBeforeReload);
 
-    const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.preventDefault();
-    };
+    const handleClickRepeat = () => {
+        resetProgress();
+        resetTimer();
+    }
+
+    useEffect(()  => {
+        resetTimerId();
+        restoreSavedTimer();
+    }, [])
 
     return (
         <>
             <Typography variant="h5" gutterBottom>
-                Thank you for your try.
+                My congratulations to you!
             </Typography>
             <Typography variant="subtitle1">
                 Though no one can go back and make a brand new start, anyone can start from
                 now and make a brand new ending." — Carl Bard
             </Typography>
             <ButtonContainer>
-                <Button onClick={handleButtonClick} id='repeat_button'>
+                <Button onClick={() => handleClickRepeat()} id='repeat_button'>
                     Repeat
                 </Button>
                 <Button
-                    component={Link}
                     variant="contained"
                     color="primary"
                     id='save_button'
-                    to={routes.result}
+                    onClick={() => saveProgressEvent()}
                 >
                     Save results
                 </Button>
@@ -81,7 +76,6 @@ const LastStep = () => {
 }
 
 const StepContent = () => {
-    // const nextStep = useUnit(model.nextStep);
     const currentQuestion = useUnit($currentQuestion);
     const nextStep = useUnit(model.nextStepEvent);
 
@@ -105,11 +99,11 @@ const QuizStepper = () => {
             sx={{
                 padding: theme.spacing(3, 0, 5),
             }}>
-            { content?.map(({ question}, index) => {
+            { content?.map(({ question}: IQuestion, index: number) => {
                 return (
                     <Step key={question} completed={scoreQuiz[index]?.isCorrectAnswer}>
                         <StepLabel
-                            icon={getIcon(scoreQuiz[index]?.isCorrectAnswer)}
+                            icon={getAnswerIcon(scoreQuiz[index]?.isCorrectAnswer)}
                         />
                     </Step>
                 );
@@ -118,8 +112,18 @@ const QuizStepper = () => {
     );
 }
 
+const Timer = () => {
+    const timer = useUnit(model.$timer);
+    return (
+        <Typography variant="h6" color="inherit" noWrap>
+            {timer}
+        </Typography>
+    );
+}
+
 const Bar = () => {
     const userName = useUnit($userName);
+
     return (
         <AppBar position="absolute" color="default">
             <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
@@ -129,9 +133,7 @@ const Bar = () => {
                         {userName}
                     </Typography>
                 </Box>
-                <Typography variant="h6" color="inherit" noWrap>
-                    {/*{timer}*/}1
-                </Typography>
+                <Timer />
             </Toolbar>
         </AppBar>
     );
@@ -140,8 +142,7 @@ const Bar = () => {
 const QuizPage = () => {
     const theme = useTheme();
     const quizName = useUnit($quizName);
-    const quizLength = useUnit($quizLength);
-    const numberOfActiveQuestion = useUnit($numberOfActiveQuestion);
+    const isLastStep = useUnit($isLastStep);
 
     const sx = useMemo(() => ({
         width: 'auto',
@@ -160,7 +161,7 @@ const QuizPage = () => {
                 </Typography>
                 <QuizStepper />
                 {
-                    numberOfActiveQuestion === quizLength ?
+                    isLastStep ?
                         <LastStep /> :
                         <StepContent />
                 }

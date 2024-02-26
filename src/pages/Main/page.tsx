@@ -25,7 +25,7 @@ const MainPage = () => {
     const resetHelperTextEvent = useUnit(model.resetHelperTextEvent);
     const setHelperTextEvent = useUnit(model.setHelperTextEvent);
     const submitFormEvent = useUnit(model.submitFormEvent);
-    console.log('userName', userName);
+
     return (
         <>
             <Grid container component="section" sx={{height: "fit-content"}}>

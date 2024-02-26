@@ -1,17 +1,17 @@
 import {createEvent, createStore, sample} from "effector";
 import {FormEvent} from "react";
-import {IQuiz, submitFormFx} from "../../shared/quiz";
 import {$root} from "../../entities/quiz";
 import {routes} from "../../shared/routing";
 import {redirect} from "atomic-router";
-import {LOCAL_STORAGE_KEY} from "../../consts";
-import {decode} from "js-base64";
+import {initialQuizFx, pageMountedReducer, saveProgressFx, updateQuizDataReducer} from "../../shared/api/quiz";
 
+export const $loading = createStore<boolean>(false);
+export const $error = createStore<Error | null>(null);
 export const $helperText = createStore<string>(" ");
 
 export const setHelperTextEvent = createEvent<string>("setHelperTextEvent");
 export const resetHelperTextEvent = createEvent("resetHelperTextEvent");
-export const pageMountedEvent = createEvent("pageMountedEvent");
+export const pageMountedEvent = createEvent("pageMountedEvent MainPage");
 
 export const submitFormEvent = createEvent<FormEvent<HTMLFormElement>>("submitFormEvent");
 
@@ -23,27 +23,38 @@ $helperText
     .reset(resetHelperTextEvent);
 
 $root
-    .on(pageMountedEvent, () => {
-        const savedStore = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (savedStore) {
-            const savedStoreDecoded: IQuiz = JSON.parse(decode(savedStore));
-            return savedStoreDecoded
-        }
-        return null;
-    })
-    .on(submitFormFx.doneData, (_, quiz: IQuiz) => quiz);
+    .on(pageMountedEvent, pageMountedReducer)
+    .on(initialQuizFx.doneData, updateQuizDataReducer);
 
 sample({
     clock: submitFormEvent,
-    target: submitFormFx
+    target: initialQuizFx
 });
 
 redirect({
-    clock: submitFormFx.done,
+    clock: initialQuizFx.done,
     route: quizRoute,
 });
 
 sample({
-    clock: submitFormFx.doneData,
+    clock: initialQuizFx.doneData,
     target: $root
+});
+
+sample({
+    clock: initialQuizFx.failData,
+    fn: () => new Error(''),
+    target: $error
+});
+
+sample({
+    clock: initialQuizFx.pending,
+    fn: () => true,
+    target: $loading
+});
+
+sample({
+    clock: saveProgressFx.finally,
+    fn: () => false,
+    source: $loading
 });

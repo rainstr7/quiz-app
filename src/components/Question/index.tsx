@@ -3,17 +3,7 @@ import React from "react";
 import { shuffle } from "lodash";
 import useTheme from "@mui/material/styles/useTheme";
 import ButtonContainer from "../ButtonContainer";
-
-type OptionType = {
-  id: string;
-  option: string;
-}
-
-export interface IQuestion {
-  question: string;
-  options: OptionType[];
-  correctAnswers: string[];
-}
+import {IQuestion} from "../../shared/api/quiz";
 
 interface IQuestionProps  extends Omit<IQuestion, 'correctAnswers'> {
   onHandleNext: (event: React.FormEvent<HTMLFormElement>) => void;

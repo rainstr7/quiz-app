@@ -17,6 +17,7 @@
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
     "@mui/styled-engine-sc": "^6.0.0-alpha.16",
+    "@types/react-beforeunload": "^2.1.5",
     "atomic-router": "^0.10.1",
     "atomic-router-react": "^0.10.0",
     "core-js": "^3.36.0",
@@ -29,6 +30,7 @@
     "lodash": "^4.17.21",
     "patronum": "^2.2.0",
     "react": "^18.2.0",
+    "react-beforeunload": "^2.6.0",
     "react-dom": "^18.2.0",
     "styled-components": "^6.1.8"
   },
