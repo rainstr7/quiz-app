@@ -13,10 +13,11 @@ import {
 } from "@mui/material";
 import {useUnit} from "effector-react/effector-react.umd";
 import {
+    $correctAnswers,
     $currentQuestion,
     $isLastStep,
     $numberOfActiveQuestion,
-    $quizContent,
+    $quizContent, $quizExpired, $quizLength,
     $quizName,
     $scoreQuiz,
     $userName
@@ -28,6 +29,10 @@ import ButtonContainer from "../../components/ButtonContainer";
 import {IQuestion} from "../../shared/api/quiz";
 import getAnswerIcon from "../../shared/lib/getAnswerIcon";
 import {useBeforeunload} from "react-beforeunload";
+import {getColorAndMessage} from "../../shared/lib/getColorAndMessage";
+import {formatDuration} from "date-fns";
+import {TIME_IS_UP} from "../../consts";
+import {isNull} from "lodash";
 
 const LastStep = () => {
     const resetProgress = useUnit(model.resetProgressEvent);
@@ -36,28 +41,32 @@ const LastStep = () => {
     const saveProgressEvent = useUnit(model.saveProgressEvent);
     const resetTimerId = useUnit(model.resetTimerIdEvent);
     const restoreSavedTimer = useUnit(model.restoreSavedTimeEvent);
-
+    const timer = useUnit(model.$timer);
+    const correctAnswers = useUnit($correctAnswers);
+    const quizLength = useUnit($quizLength);
+    const quizExpired = useUnit($quizExpired);
     useBeforeunload(saveTimeBeforeReload);
 
     const handleClickRepeat = () => {
         resetProgress();
         resetTimer();
     }
+    const label = useMemo(() => {
+        const [color, message] = getColorAndMessage(correctAnswers / quizLength);
+        return (
+            <Typography variant="h5" gutterBottom color={color}>
+                {`You score ${correctAnswers}/${quizLength} ${message}`}
+            </Typography>)
+    }, [correctAnswers, quizLength])
 
-    useEffect(()  => {
+    useEffect(() => {
         resetTimerId();
         restoreSavedTimer();
-    }, [])
+    }, [resetTimerId, restoreSavedTimer])
 
     return (
         <>
-            <Typography variant="h5" gutterBottom>
-                My congratulations to you!
-            </Typography>
-            <Typography variant="subtitle1">
-                Though no one can go back and make a brand new start, anyone can start from
-                now and make a brand new ending." — Carl Bard
-            </Typography>
+            {label}
             <ButtonContainer>
                 <Button onClick={() => handleClickRepeat()} id='repeat_button'>
                     Repeat
@@ -66,7 +75,7 @@ const LastStep = () => {
                     variant="contained"
                     color="primary"
                     id='save_button'
-                    onClick={() => saveProgressEvent()}
+                    onClick={() => saveProgressEvent({score: correctAnswers / quizLength, begin: quizExpired, timer })}
                 >
                     Save results
                 </Button>
@@ -95,13 +104,13 @@ const QuizStepper = () => {
     return (
         <Stepper
             activeStep={numberOfActiveQuestion}
-            connector={<StepConnector />}
+            connector={<StepConnector/>}
             sx={{
                 padding: theme.spacing(3, 0, 5),
             }}>
-            { content?.map(({ question}: IQuestion, index: number) => {
+            {content?.map(({question}: IQuestion, index: number) => {
                 return (
-                    <Step key={question} completed={scoreQuiz[index]?.isCorrectAnswer}>
+                    <Step key={`${question}_${index}`} completed={scoreQuiz[index]?.isCorrectAnswer}>
                         <StepLabel
                             icon={getAnswerIcon(scoreQuiz[index]?.isCorrectAnswer)}
                         />
@@ -114,9 +123,14 @@ const QuizStepper = () => {
 
 const Timer = () => {
     const timer = useUnit(model.$timer);
+    if (isNull(timer)) {
+        return null
+    }
     return (
         <Typography variant="h6" color="inherit" noWrap>
-            {timer}
+            {timer === TIME_IS_UP ? TIME_IS_UP : formatDuration(timer, {
+                format: ['minutes', 'seconds']
+            })}
         </Typography>
     );
 }
@@ -128,12 +142,12 @@ const Bar = () => {
         <AppBar position="absolute" color="default">
             <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
                 <Box sx={{display: 'flex', alignItems: 'center'}}>
-                    <Avatar sx={{m: 1}} />
+                    <Avatar sx={{m: 1}}/>
                     <Typography variant="h6" color="inherit" noWrap>
                         {userName}
                     </Typography>
                 </Box>
-                <Timer />
+                <Timer/>
             </Toolbar>
         </AppBar>
     );
@@ -153,17 +167,17 @@ const QuizPage = () => {
 
     return (
         <Box>
-            <Bar />
+            <Bar/>
             <Paper
                 sx={sx}>
                 <Typography component="h1" variant="h4" align="left">
                     {quizName}
                 </Typography>
-                <QuizStepper />
+                <QuizStepper/>
                 {
                     isLastStep ?
-                        <LastStep /> :
-                        <StepContent />
+                        <LastStep/> :
+                        <StepContent/>
                 }
             </Paper>
         </Box>

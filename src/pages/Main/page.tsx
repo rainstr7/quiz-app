@@ -35,11 +35,12 @@ const MainPage = () => {
                     sm={4}
                     md={7}
                     sx={{
-                        backgroundImage: 'background_1200.webp',
+                        backgroundImage: "url(https://thumbnail.hh.ru/vacancy/89375809.png?lcth=eba17e0f96d1b4c229ef3ceb51407b74&host=hh.ru)",
                         backgroundRepeat: "no-repeat",
                         backgroundColor: "background.default",
-                        backgroundSize: "cover",
-                        backgroundPosition: "top"
+                        backgroundSize: "contain",
+                        backgroundPosition: "center",
+                        p: 2
                     }}
                 />
                 <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -86,8 +87,8 @@ const MainPage = () => {
                                     label="Select quiz"
                                     defaultValue="About Me">
                                     <MenuItem value="About Me">About Me</MenuItem>
-                                    <MenuItem value="Welcome 2">Welcome 2</MenuItem>
-                                    <MenuItem value="Welcome 3">Welcome 3</MenuItem>
+                                    <MenuItem value="Java Script">Java Script</MenuItem>
+                                    <MenuItem value="React">React</MenuItem>
                                 </Select>
                             </FormControl>
                             <FormControlLabel

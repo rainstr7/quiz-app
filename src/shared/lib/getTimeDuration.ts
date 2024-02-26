@@ -1,23 +1,20 @@
-import { formatDuration, intervalToDuration } from 'date-fns'
+import { intervalToDuration } from 'date-fns'
 import {isNull, isUndefined} from "lodash";
 import {TIME_IS_UP} from "../../consts";
+import {Duration} from "date-fns/types";
 
-export const getTimeDuration = (deadline: Date | null): string | null  => {
-  console.log('deadline test', deadline, typeof deadline);
-  const now = new Date()
+export const getTimeDuration = (deadline: Date | null, anchor: Date = new Date()): Duration | typeof TIME_IS_UP| null   => {
+  console.log('deadline test', deadline, typeof deadline, 'anchor', anchor);
 
   if (isNull(deadline) || isUndefined(deadline)) {
     return null;
   }
-  if (now > deadline) {
+  if (anchor > deadline) {
     return TIME_IS_UP;
   }
-  const duration = intervalToDuration({
-    start: Date(),
+
+  return intervalToDuration({
+    start: anchor,
     end: deadline
   });
-
-  return formatDuration(duration, {
-    format: ['minutes', 'seconds']
-  })
 }

@@ -5,9 +5,9 @@ import React from "react";
 import {
     addAnswerReducer, getTimeReducer, goToTheLastStepReducer, initialTimerFx,
     resetProgressReducer,
-    restoreSavedProgressReducer, restoreSavedTimeReducer,
+    restoreSavedProgressReducer, restoreSavedTimeReducer, ResultType,
     saveProgressBeforeReloadReducer,
-    saveProgressFx, saveTimeBeforeReloadReducer,
+    saveProgressFx, saveResultReducer, saveTimeBeforeReloadReducer, TimerType,
 } from "../../shared/api/quiz";
 import {redirect} from "atomic-router";
 import {TIME_IS_UP} from "../../consts";
@@ -20,7 +20,7 @@ export const nextStepEvent = createEvent<React.FormEvent<HTMLFormElement>>("next
 export const saveConfigBeforeReloadEvent = createEvent();
 export const restoreSavedProgressEvent = createEvent();
 export const resetProgressEvent = createEvent();
-export const saveProgressEvent = createEvent();
+export const saveProgressEvent = createEvent<ResultType>();
 
 export const timeIsUpEvent = createEvent();
 export const saveTimeBeforeReloadEvent = createEvent()
@@ -33,22 +33,30 @@ export const resetTimerIdEvent = createEvent();
 
 export const $loading = createStore<boolean>(false);
 export const $error = createStore<Error | null>(null);
-export const $timer = createStore<string | null>(null);
+export const $timer = createStore<TimerType>(null);
 export const $timerId = createStore<number | null>(null);
 
 export const $timeIsUp = $timer.map((time) => time === TIME_IS_UP);
 
-$timeIsUp.watch((time) => {console.log('timeIsUp watch', time)})
-$timer.watch((time) => {console.log('timer watch', time)})
-$timerId.watch((time) => {console.log('$timerId watch', time)})
-$quizExpired.watch((expired) => {console.log('$quizExpired watch', expired)})
+$timeIsUp.watch((time) => {
+    console.log('timeIsUp watch', time)
+})
+$timer.watch((time) => {
+    console.log('timer watch', time)
+})
+$timerId.watch((time) => {
+    console.log('$timerId watch', time)
+})
+$quizExpired.watch((expired) => {
+    console.log('$quizExpired watch', expired)
+})
 
 $root
     .on(nextStepEvent, addAnswerReducer)
     .on(saveConfigBeforeReloadEvent, saveProgressBeforeReloadReducer)
     .on(restoreSavedProgressEvent, restoreSavedProgressReducer)
     .on(resetProgressEvent, resetProgressReducer)
-    .on(saveProgressEvent, (_, quiz) => quiz)
+    .on(saveProgressFx.doneData, saveResultReducer)
     .on(timeIsUpEvent, goToTheLastStepReducer);
 
 
@@ -81,7 +89,6 @@ sample({
 
 sample({
     clock: saveProgressEvent,
-    source: $root,
     target: saveProgressFx
 })
 
