@@ -3,11 +3,11 @@ import {useUnit} from "effector-react";
 import * as model from "./model";
 import MainPage from "./page";
 import {currentRoute} from "./model";
-import Spinner from "../../components/Spinner";
+// import Spinner from "../../components/Spinner";
 
 const Main = () => {
     const pageMount = useUnit(model.pageMountedEvent);
-    const loading = useUnit(model.$loading)
+    // const loading = useUnit(model.$loading)
 
     useEffect(() => {
         pageMount();
@@ -16,7 +16,7 @@ const Main = () => {
     return (
         <>
             <MainPage/>
-            {loading && <Spinner/>}
+            {/*{loading && <Spinner/>}TODO INFINITY SPINNER -> DEBUGGING */}
         </>
 
     )
