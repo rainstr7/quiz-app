@@ -17,6 +17,7 @@ import {
 import ButtonContainer from "../../components/ButtonContainer";
 import {useUnit} from "effector-react";
 import * as model from "./model";
+import {$userName} from "../../entities/quiz";
 
 const MainPage = () => {
     const helperText = useUnit(model.$helperText);
