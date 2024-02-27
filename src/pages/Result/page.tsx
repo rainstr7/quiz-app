@@ -84,6 +84,7 @@ const ResultPage = () => {
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
         padding: theme.spacing(2),
+        minWidth: '25rem'
     }), [theme]);
 
     return (

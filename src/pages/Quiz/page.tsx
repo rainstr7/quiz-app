@@ -2,7 +2,7 @@ import useTheme from "@mui/material/styles/useTheme";
 import {
     AppBar,
     Avatar,
-    Box, Button,
+    Box, Button, Chip,
     Paper,
     Step,
     StepConnector,
@@ -33,6 +33,7 @@ import {getColorAndMessage} from "../../shared/lib/getColorAndMessage";
 import {formatDuration} from "date-fns";
 import {TIME_IS_UP} from "../../consts";
 import {isNull} from "lodash";
+import {SportsScore} from "@mui/icons-material";
 
 const LastStep = () => {
     const resetProgress = useUnit(model.resetProgressEvent);
@@ -55,8 +56,15 @@ const LastStep = () => {
     const label = useMemo(() => {
         const [color, message] = getColorAndMessage(correctAnswers / quizLength);
         return (
-            <Typography variant="h5" gutterBottom color={color}>
-                {`You score ${correctAnswers}/${quizLength} ${message}`}
+            <Typography variant="body1" gutterBottom >
+                You score
+                <Chip
+                    icon={<SportsScore/>}
+                    label={`${correctAnswers} / ${quizLength}`}
+                    color={color}
+                    sx={{m: 1}}
+                />
+                {message}
             </Typography>)
     }, [correctAnswers, quizLength])
 
@@ -108,6 +116,10 @@ const QuizStepper = () => {
             connector={<StepConnector/>}
             sx={{
                 padding: theme.spacing(3, 0, 5),
+                display: {
+                    xs: 'none',
+                    sm: 'flex'
+                }
             }}>
             {content?.map(({question}: IQuestion, index: number) => {
                 return (
@@ -164,6 +176,7 @@ const QuizPage = () => {
         marginTop: theme.spacing(3),
         marginBottom: theme.spacing(3),
         padding: theme.spacing(2),
+        minWidth: '25rem'
     }), [theme]);
 
     return (

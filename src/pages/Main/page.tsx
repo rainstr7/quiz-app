@@ -28,7 +28,12 @@ const MainPage = () => {
 
     return (
         <>
-            <Grid container component="section" sx={{height: "fit-content"}}>
+            <Grid container component="section" sx={{
+                height: "fit-content",
+                justifyContent: 'center',
+                p: 2,
+            }}
+            >
                 <Grid
                     item
                     xs={false}
@@ -40,7 +45,13 @@ const MainPage = () => {
                         backgroundColor: "background.default",
                         backgroundSize: "contain",
                         backgroundPosition: "center",
-                        p: 2
+                        p: 2,
+                        display: {
+                            xs: 'none',
+                            sm: 'none',
+                            md: 'none',
+                            lg: 'block'
+                        }
                     }}
                 />
                 <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
