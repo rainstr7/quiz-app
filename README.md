@@ -1,7 +1,14 @@
 # React + TypeScript + Vite + Effector + Atomic-router + MUI
+![Static Badge](https://img.shields.io/badge/18%2C2-black?style=social&logo=react)
+![Static Badge](https://img.shields.io/badge/4%2C1%2C1-black?style=social&logo=vite)
+![Static Badge](https://img.shields.io/badge/4%2C9%2C5-black?style=social&logo=typescript)
+![Static Badge](https://img.shields.io/badge/effector-23%2C2%2C-black?style=social)
+![Static Badge](https://img.shields.io/badge/atomic_router-0%2C1-black?style=social)
+
 Open [Demo](https://quiz-app-six-eta.vercel.app/) to view it in the browser.
 
-Что сделал:
+Что сделал:  
+
 ✅ Вид начального экрана — название теста, ввод имени, кнопка запуска.  
 
 ✅ Вид экрана вопроса — текст вопроса, варианты ответов, кнопка «Продолжить». Каждый чекбокс ответа относится к соответствующему вопросу.  
