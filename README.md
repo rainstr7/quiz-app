@@ -1,9 +1,9 @@
 # React + TypeScript + Vite + Effector + Atomic-router + MUI
-![Static Badge](https://img.shields.io/badge/18%2C2-black?style=social&logo=react)
-![Static Badge](https://img.shields.io/badge/4%2C1%2C1-black?style=social&logo=vite)
-![Static Badge](https://img.shields.io/badge/4%2C9%2C5-black?style=social&logo=typescript)
-![Static Badge](https://img.shields.io/badge/effector-23%2C2%2C-black?style=social)
-![Static Badge](https://img.shields.io/badge/atomic_router-0%2C1-black?style=social)
+![Static Badge](https://img.shields.io/badge/18%2C2-black?style=social&logo=react)  
+![Static Badge](https://img.shields.io/badge/4%2C1%2C1-black?style=social&logo=vite)  
+![Static Badge](https://img.shields.io/badge/4%2C9%2C5-black?style=social&logo=typescript)  
+![Static Badge](https://img.shields.io/badge/effector-23%2C2%2C-black?style=social)  
+![Static Badge](https://img.shields.io/badge/atomic_router-0%2C1-black?style=social)  
 
 Open [Demo](https://quiz-app-six-eta.vercel.app/) to view it in the browser.
 
@@ -37,8 +37,8 @@ Open [Demo](https://quiz-app-six-eta.vercel.app/) to view it in the browser.
 
 
 В целом все есть. Не продакшн конечно, но в стиль кода, подходы, я думаю что оценить можно, больше чем потратил времени на тестовое уже потратить не могу.
-Основные сложности возникли, когда я принял challenge разобраться в `effector`. "Ну подумаешь state manager" - подумал я и потом это "взорвало" мне мозг после многолетнего использования redux и context.
-Потом как следствие пришлось разбираться в `atomic-router` потому что адекватно react-router не работает с effector. При практически полном отсутствии experience в интернете и весьма скудной документации было разбираться весело. Ну вот что-то получилось уж не судите строго, но больше времени тратить на тестовое уже не могу.  
+Основные сложности возникли, когда я принял challenge разобраться в `effector`. "Ну подумаешь state manager" - подумал я и потом это "взорвало" мне мозг после многолетнего использования redux и context. (до этого задания я не использовал `effector` никогда)
+Потом как следствие пришлось разбираться в `atomic-router` потому что адекватно `react-router` не работает с `effector`. При практически полном отсутствии experience в интернете и весьма скудной документации было разбираться весело. Ну вот что-то получилось уж не судите строго, но больше времени тратить на тестовое уже не могу. Костыли связаны с не пониманием до конца возможностей `effector`. 
 Когда немного остыну от взаимодействия с новоизученным стеком вернусь и поправлю баги (но это не точно). )))
 
 запускать по скрипту ```npm run dev```.
