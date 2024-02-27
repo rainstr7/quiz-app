@@ -103,7 +103,7 @@ export const pageMountedReducer = (quiz: IQuiz | null) => {
 
 export const updateQuizDataReducer = (quizSaved: IQuiz | null, quiz: IQuiz) => {
     if (quizSaved) {
-        return ({ ...quiz, history: quizSaved.history})
+        return ({...quiz, history: quizSaved.history})
     }
     return quiz
 }
@@ -188,7 +188,12 @@ export const resetProgressReducer = (quiz: IQuiz | null) => {
     return restoredProgress;
 }
 
-export const saveProgressFx = createEffect<ResultType, IHistoryResults, Error>(async ({timer, score, begin, quizExpired}) => {
+export const saveProgressFx = createEffect<ResultType, IHistoryResults, Error>(async ({
+                                                                                          timer,
+                                                                                          score,
+                                                                                          begin,
+                                                                                          quizExpired
+                                                                                      }) => {
     if (begin && timer) {
         if (timer === TIME_IS_UP) {
             return {

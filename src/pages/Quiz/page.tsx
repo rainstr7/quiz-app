@@ -56,7 +56,7 @@ const LastStep = () => {
     const label = useMemo(() => {
         const [color, message] = getColorAndMessage(correctAnswers / quizLength);
         return (
-            <Typography variant="body1" gutterBottom >
+            <Typography variant="body1" gutterBottom>
                 You score
                 <Chip
                     icon={<SportsScore/>}
@@ -84,7 +84,7 @@ const LastStep = () => {
                     variant="contained"
                     color="primary"
                     id='save_button'
-                    onClick={() => saveProgressEvent({score: correctAnswers / quizLength, begin, quizExpired, timer })}
+                    onClick={() => saveProgressEvent({score: correctAnswers / quizLength, begin, quizExpired, timer})}
                 >
                     Save results
                 </Button>
