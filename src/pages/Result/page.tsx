@@ -27,7 +27,6 @@ const ListResultItem = ({date, time, score}: IHistoryResults) => {
             <ListItemText
                 primary={date}
                 secondary={
-                    <React.Fragment>
                         <Typography
                             component="span"
                             variant="body2"
@@ -48,7 +47,6 @@ const ListResultItem = ({date, time, score}: IHistoryResults) => {
                             />
 
                         </Typography>
-                    </React.Fragment>
                 }
             />
         </ListItem>
@@ -58,7 +56,7 @@ const ListResultItem = ({date, time, score}: IHistoryResults) => {
 const ListResults = () => {
     const theme = useTheme();
     const quizHistory = useUnit($quizHistory);
-    console.log('quiz history', quizHistory)
+
     return (
         <List sx={{
             width: '100%',
