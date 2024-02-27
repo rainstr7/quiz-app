@@ -1,4 +1,5 @@
 # React + TypeScript + Vite + Effector + Atomic-router + MUI
+Open [Demo](https://quiz-app-six-eta.vercel.app/) to view it in the browser.
 
 Что сделал:
 1) Вид начального экрана — название теста, ввод имени, кнопка запуска.
@@ -25,7 +26,8 @@
 Потом как следствие пришлось разбираться в `atomic-router` потому что адекватно react-router не работает с effector. При практически полном отсутствии experience в интернете и весьма скудной документации было разбираться весело. Ну вот что-то получилось уж не судите строго, но больше времени тратить на тестовое уже не могу.  
 Когда немного остыну от взаимодействия с новоизученным стеком вернусь и поправлю баги (но это не точно). )))
 
-запускать по скрипту ```npm run dev```
+запускать по скрипту ```npm run dev```.
+
 Open [http://localhost:5173](http://localhost:5173/) to view it in the browser.
 
-Open [Demo](https://quiz-app-six-eta.vercel.app/) to view it in the browser.
+
