@@ -4,7 +4,6 @@ import {add, addMinutes, format, formatDuration} from "date-fns";
 import React from "react";
 import {decode, encode} from "js-base64";
 import {LOCAL_STORAGE_KEY, QUIZ_TIMING, TIME_IS_UP} from "../../consts";
-import {getWait} from "../lib/getWait";
 import {getTimeDuration} from "../lib/getTimeDuration";
 import {Duration} from "date-fns/types";
 
@@ -14,6 +13,7 @@ export type ResultType = {
     score: number;
     timer: TimerType;
     begin: Date | null;
+    quizExpired: Date | null;
 }
 
 type OptionType = {
@@ -85,6 +85,7 @@ export const initialQuizFx = createEffect<React.FormEvent<HTMLFormElement>, IQui
         score: [],
         user,
         saveSession,
+        history: []
     };
     if (saveSession) {
         localStorage.setItem(LOCAL_STORAGE_KEY, encode(JSON.stringify(initialStore)));
@@ -101,7 +102,13 @@ export const pageMountedReducer = (quiz: IQuiz | null) => {
     return quiz;
 }
 
-export const updateQuizDataReducer = (_: IQuiz | null, quiz: IQuiz) => quiz
+export const updateQuizDataReducer = (quizSaved: IQuiz | null, quiz: IQuiz) => {
+    console.log('quizSaved', quizSaved)
+    if (quizSaved) {
+        return ({ ...quiz, history: quizSaved.history})
+    }
+    return quiz
+}
 
 export const addAnswerReducer = (quiz: IQuiz | null, event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -129,7 +136,7 @@ export const addAnswerReducer = (quiz: IQuiz | null, event: React.FormEvent<HTML
 
 export const saveProgressBeforeReloadReducer = (quiz: IQuiz | null) => {
     if (quiz) {
-        localStorage.setItem(LOCAL_STORAGE_KEY, encode(JSON.stringify(quiz)));
+        localStorage.setItem(LOCAL_STORAGE_KEY, (JSON.stringify(quiz)));
     }
     return quiz;
 };
@@ -183,10 +190,7 @@ export const resetProgressReducer = (quiz: IQuiz | null) => {
     return restoredProgress;
 }
 
-export const saveProgressFx = createEffect<ResultType, IHistoryResults, Error>(async ({timer, score, begin}) => {
-    await getWait();
-    console.log('restoredProgress timer', timer);
-    console.log('restoredProgress timer', begin);
+export const saveProgressFx = createEffect<ResultType, IHistoryResults, Error>(async ({timer, score, begin, quizExpired}) => {
     if (begin && timer) {
         if (timer === TIME_IS_UP) {
             return {
@@ -196,15 +200,12 @@ export const saveProgressFx = createEffect<ResultType, IHistoryResults, Error>(a
             }
         }
         const addDuration = add(begin, timer);
-        console.log('restoredProgress addDuration', addDuration);
-        const duration = getTimeDuration(addDuration, begin);
-        console.log('restoredProgress duration', duration);
+        const duration = getTimeDuration(quizExpired, addDuration);
         const restoredProgress: IHistoryResults = {
             score,
             time: formatDuration(duration as Duration, {format: ['minutes', 'seconds']}),
             date: format(new Date(), 'dd.MM.yyyy HH:mm'),
         }
-        console.log('restoredProgress', restoredProgress)
         return restoredProgress;
     }
     return {} as IHistoryResults
@@ -229,9 +230,8 @@ export const getTimeReducer = ((_: TimerType, quizExpired: Date | null) => getTi
 
 
 export const saveResultReducer = ((quiz: IQuiz | null, result: IHistoryResults) => {
-
     if (quiz) {
-        return {...quiz, history: [...(quiz?.history || []), result]}
+        return {...quiz, history: [...(quiz?.history ?? []), result]}
     }
-    return quiz;
+    return null;
 });

@@ -21,4 +21,7 @@ export const $correctAnswers = $root.map((quiz) => {
     }
     return 0;
 })
-export const $isAuth = $root.map((quiz) => quiz?.user ?? null)
+    $root.watch((history) => console.log('ROOT STORE', history))
+    $quizHistory.watch((history) => console.log('HISTORY STORE', history)) //TODO WHY HISTORY CLEARED???
+export const $isAuth = $root.map((quiz) => quiz?.user ?? null) //TODO make secure routing
+

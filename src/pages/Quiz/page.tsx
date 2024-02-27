@@ -16,7 +16,7 @@ import {
     $correctAnswers,
     $currentQuestion,
     $isLastStep,
-    $numberOfActiveQuestion,
+    $numberOfActiveQuestion, $quizBegin,
     $quizContent, $quizExpired, $quizLength,
     $quizName,
     $scoreQuiz,
@@ -45,6 +45,7 @@ const LastStep = () => {
     const correctAnswers = useUnit($correctAnswers);
     const quizLength = useUnit($quizLength);
     const quizExpired = useUnit($quizExpired);
+    const begin = useUnit($quizBegin);
     useBeforeunload(saveTimeBeforeReload);
 
     const handleClickRepeat = () => {
@@ -62,7 +63,7 @@ const LastStep = () => {
     useEffect(() => {
         resetTimerId();
         restoreSavedTimer();
-    }, [resetTimerId, restoreSavedTimer])
+    }, [])
 
     return (
         <>
@@ -75,7 +76,7 @@ const LastStep = () => {
                     variant="contained"
                     color="primary"
                     id='save_button'
-                    onClick={() => saveProgressEvent({score: correctAnswers / quizLength, begin: quizExpired, timer })}
+                    onClick={() => saveProgressEvent({score: correctAnswers / quizLength, begin, quizExpired, timer })}
                 >
                     Save results
                 </Button>

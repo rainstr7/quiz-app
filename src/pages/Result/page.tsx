@@ -35,7 +35,7 @@ const ListResultItem = ({date, time, score}: IHistoryResults) => {
                         >
                             <Chip
                                 icon={<Face/>}
-                                label={score}
+                                label={`${score * 100}%`}
                                 color={color}
                                 sx={{mt: 1}}
                             />
@@ -69,7 +69,6 @@ const ListResults = () => {
             {quizHistory.slice(-3).map((post) => {
                 return (
                     <React.Fragment key={post.date + post.score}>
-                        <Divider variant="inset" component="li"/>
                         <ListResultItem {...post}/>
                         <Divider variant="inset" component="li"/>
                     </React.Fragment>
