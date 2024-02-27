@@ -85,7 +85,6 @@ export const initialQuizFx = createEffect<React.FormEvent<HTMLFormElement>, IQui
         score: [],
         user,
         saveSession,
-        history: []
     };
     if (saveSession) {
         localStorage.setItem(LOCAL_STORAGE_KEY, encode(JSON.stringify(initialStore)));
@@ -95,7 +94,7 @@ export const initialQuizFx = createEffect<React.FormEvent<HTMLFormElement>, IQui
 
 export const pageMountedReducer = (quiz: IQuiz | null) => {
     const savedStore = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (savedStore) {
+    if (savedStore && isNull(quiz)) {
         const savedStoreDecoded: IQuiz = JSON.parse(decode(savedStore));
         return savedStoreDecoded
     }
@@ -103,7 +102,6 @@ export const pageMountedReducer = (quiz: IQuiz | null) => {
 }
 
 export const updateQuizDataReducer = (quizSaved: IQuiz | null, quiz: IQuiz) => {
-    console.log('quizSaved', quizSaved)
     if (quizSaved) {
         return ({ ...quiz, history: quizSaved.history})
     }
@@ -136,14 +134,14 @@ export const addAnswerReducer = (quiz: IQuiz | null, event: React.FormEvent<HTML
 
 export const saveProgressBeforeReloadReducer = (quiz: IQuiz | null) => {
     if (quiz) {
-        localStorage.setItem(LOCAL_STORAGE_KEY, (JSON.stringify(quiz)));
+        localStorage.setItem(LOCAL_STORAGE_KEY, (encode(JSON.stringify(quiz))));
     }
     return quiz;
 };
 
 export const saveTimeBeforeReloadReducer = (time: TimerType) => {
     if (!isNull(time)) {
-        localStorage.setItem(`${LOCAL_STORAGE_KEY}_time`, JSON.stringify(time));
+        localStorage.setItem(`${LOCAL_STORAGE_KEY}_time`, encode(JSON.stringify(time)));
     }
     return time;
 };
@@ -151,7 +149,7 @@ export const saveTimeBeforeReloadReducer = (time: TimerType) => {
 export const restoreSavedTimeReducer = (time: TimerType) => {
     const savedTime = localStorage.getItem(`${LOCAL_STORAGE_KEY}_time`);
     if (isNull(time) && !isNull(savedTime)) {
-        const decodedSavedTime: TimerType = JSON.parse(savedTime);
+        const decodedSavedTime: TimerType = JSON.parse(decode(savedTime));
         return decodedSavedTime;
     }
     if (savedTime) {

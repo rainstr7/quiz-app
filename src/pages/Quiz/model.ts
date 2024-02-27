@@ -1,6 +1,6 @@
 import {routes} from "../../shared/routing";
 import {createEvent, createStore, sample} from "effector";
-import {$quizExpired, $root} from "../../entities/quiz";
+import {$root} from "../../entities/quiz";
 import React from "react";
 import {
     addAnswerReducer, getTimeReducer, goToTheLastStepReducer, initialTimerFx,
@@ -37,19 +37,6 @@ export const $timer = createStore<TimerType>(null);
 export const $timerId = createStore<number | null>(null);
 
 export const $timeIsUp = $timer.map((time) => time === TIME_IS_UP);
-
-$timeIsUp.watch((time) => {
-    console.log('timeIsUp watch', time)
-})
-$timer.watch((time) => {
-    console.log('timer watch', time)
-})
-$timerId.watch((time) => {
-    console.log('$timerId watch', time)
-})
-$quizExpired.watch((expired) => {
-    console.log('$quizExpired watch', expired)
-})
 
 $root
     .on(nextStepEvent, addAnswerReducer)

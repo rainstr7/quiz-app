@@ -37,11 +37,6 @@ redirect({
 });
 
 sample({
-    clock: initialQuizFx.doneData,
-    target: $root
-});
-
-sample({
     clock: initialQuizFx.failData,
     fn: () => new Error(''),
     target: $error
@@ -56,5 +51,5 @@ sample({
 sample({
     clock: saveProgressFx.finally,
     fn: () => false,
-    source: $loading
+    target: $loading
 });

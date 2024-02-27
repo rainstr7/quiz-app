@@ -4,6 +4,7 @@ import {IQuiz} from "../../shared/api/quiz";
 export const $root = createStore<IQuiz | null>(null);
 export const $quizName = $root.map((quiz) => quiz?.quiz ?? null);
 export const $userName = $root.map((quiz) => quiz?.user ?? null);
+export const $rememberUserName = $root.map((quiz) => quiz?.saveSession ?? false);
 export const $quizLength = $root.map((quiz) => quiz?.content?.length ?? 0);
 export const $numberOfActiveQuestion = $root.map((quiz) => quiz?.progress ?? 0);
 export const $quizContent = $root.map((quiz) => quiz?.content ?? null);
@@ -21,7 +22,6 @@ export const $correctAnswers = $root.map((quiz) => {
     }
     return 0;
 })
-    $root.watch((history) => console.log('ROOT STORE', history))
-    $quizHistory.watch((history) => console.log('HISTORY STORE', history)) //TODO WHY HISTORY CLEARED???
+
 export const $isAuth = $root.map((quiz) => quiz?.user ?? null) //TODO make secure routing
 
