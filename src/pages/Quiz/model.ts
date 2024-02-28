@@ -1,6 +1,6 @@
 import {routes} from "../../shared/routing";
-import {createEvent, createStore, sample} from "effector";
-import {$root} from "../../entities/quiz";
+import {combine, createEvent, createStore, sample} from "effector";
+import {$correctAnswers, $quizBegin, $quizExpired, $quizLength, $root} from "../../entities/quiz";
 import React from "react";
 import {
     addAnswerReducer, getTimeReducer, goToTheLastStepReducer, initialTimerFx,
@@ -111,3 +111,11 @@ redirect({
     clock: saveProgressFx.doneData,
     route: resultsRoute,
 });
+
+export const $lastStepCombine = combine({
+    timer: $timer,
+    correctAnswers: $correctAnswers,
+    quizLength: $quizLength,
+    quizExpired: $quizExpired,
+    begin: $quizBegin
+})

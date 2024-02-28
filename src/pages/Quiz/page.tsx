@@ -13,11 +13,10 @@ import {
 } from "@mui/material";
 import {useUnit} from "effector-react/effector-react.umd";
 import {
-    $correctAnswers,
     $currentQuestion,
     $isLastStep,
-    $numberOfActiveQuestion, $quizBegin,
-    $quizContent, $quizExpired, $quizLength,
+    $numberOfActiveQuestion,
+    $quizContent,
     $quizName,
     $scoreQuiz,
     $userName
@@ -42,11 +41,14 @@ const LastStep = () => {
     const saveProgressEvent = useUnit(model.saveProgressEvent);
     const resetTimerId = useUnit(model.resetTimerIdEvent);
     const restoreSavedTimer = useUnit(model.restoreSavedTimeEvent);
-    const timer = useUnit(model.$timer);
-    const correctAnswers = useUnit($correctAnswers);
-    const quizLength = useUnit($quizLength);
-    const quizExpired = useUnit($quizExpired);
-    const begin = useUnit($quizBegin);
+    const {
+        timer,
+        correctAnswers,
+        quizLength,
+        quizExpired,
+        begin
+    } = useUnit(model.$lastStepCombine);
+
     useBeforeunload(saveTimeBeforeReload);
 
     const handleClickRepeat = () => {
@@ -56,16 +58,18 @@ const LastStep = () => {
     const label = useMemo(() => {
         const [color, message] = getColorAndMessage(correctAnswers / quizLength);
         return (
-            <Typography variant="body1" gutterBottom>
-                You score
+            <Box>
                 <Chip
                     icon={<SportsScore/>}
                     label={`${correctAnswers} / ${quizLength}`}
                     color={color}
                     sx={{m: 1}}
                 />
-                {message}
-            </Typography>)
+                <br/>
+                <Typography variant="body2" sx={{textAlign: 'center'}}>
+                    {message}
+                </Typography>
+            </Box>)
     }, [correctAnswers, quizLength])
 
     useEffect(() => {

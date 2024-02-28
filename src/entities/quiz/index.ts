@@ -4,6 +4,7 @@ import {IQuiz} from "../../shared/api/quiz";
 export const $root = createStore<IQuiz | null>(null);
 export const $quizName = $root.map((quiz) => quiz?.quiz ?? null);
 export const $userName = $root.map((quiz) => quiz?.user ?? null);
+export const $userRemember = $root.map((quiz) => quiz?.saveSession ?? false);
 export const $quizLength = $root.map((quiz) => quiz?.content?.length ?? 0);
 export const $numberOfActiveQuestion = $root.map((quiz) => quiz?.progress ?? 0);
 export const $quizContent = $root.map((quiz) => quiz?.content ?? null);
@@ -22,5 +23,5 @@ export const $correctAnswers = $root.map((quiz) => {
     return 0;
 })
 
-export const $isAuth = $root.map((quiz) => quiz?.user ?? null) //TODO make secure routing
+export const $isAuth = $root.map((quiz) => quiz?.user ?? false) //TODO make secure routing
 

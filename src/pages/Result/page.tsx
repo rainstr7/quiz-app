@@ -1,5 +1,4 @@
-import {useUnit} from "effector-react";
-import {$quizHistory} from "../../entities/quiz";
+import {useList} from "effector-react";
 import {
     Box, Button,
     Chip,
@@ -17,8 +16,7 @@ import {IHistoryResults} from "../../shared/api/quiz";
 import {getColorAndMessage} from "../../shared/lib/getColorAndMessage";
 import ButtonContainer from "../../components/ButtonContainer";
 import {Link} from "atomic-router-react";
-import {mainPage} from "./model";
-
+import {$history, mainPage} from "./model";
 
 const ListResultItem = ({date, time, score}: IHistoryResults) => {
     const [color] = getColorAndMessage(score);
@@ -27,26 +25,25 @@ const ListResultItem = ({date, time, score}: IHistoryResults) => {
             <ListItemText
                 primary={date}
                 secondary={
-                        <Typography
-                            component="span"
-                            variant="body2"
+                    <Typography
+                        component="span"
+                        variant="body2"
+                        color={color}
+                    >
+                        <Chip
+                            icon={<Face/>}
+                            label={`${score * 100}%`}
                             color={color}
-                        >
-                            <Chip
-                                icon={<Face/>}
-                                label={`${score * 100}%`}
-                                color={color}
-                                sx={{mt: 1}}
-                            />
-                            <br/>
-                            <Chip
-                                icon={<AlarmOn/>}
-                                label={time}
-                                color="info"
-                                sx={{mt: 1}}
-                            />
-
-                        </Typography>
+                            sx={{mt: 1}}
+                        />
+                        <br/>
+                        <Chip
+                            icon={<AlarmOn/>}
+                            label={time}
+                            color="info"
+                            sx={{mt: 1}}
+                        />
+                    </Typography>
                 }
             />
         </ListItem>
@@ -55,8 +52,12 @@ const ListResultItem = ({date, time, score}: IHistoryResults) => {
 
 const ListResults = () => {
     const theme = useTheme();
-    const quizHistory = useUnit($quizHistory);
-
+    const list = useList($history, (post) => (
+        <React.Fragment key={post.date + post.score}>
+            <ListResultItem {...post}/>
+            <Divider variant="inset" component="li"/>
+        </React.Fragment>
+    ));
     return (
         <List sx={{
             width: '100%',
@@ -64,14 +65,7 @@ const ListResults = () => {
             backgroundColor: theme.palette.background.default,
             pr: 10
         }}>
-            {quizHistory.slice(-3).map((post) => {
-                return (
-                    <React.Fragment key={post.date + post.score}>
-                        <ListResultItem {...post}/>
-                        <Divider variant="inset" component="li"/>
-                    </React.Fragment>
-                );
-            })}
+            {list}
         </List>
     );
 }
@@ -98,7 +92,7 @@ const ResultPage = () => {
                 <ButtonContainer>
                     <Button
                         component={Link}
-                        id='go-back'
+                        id='go-to-begin'
                         to={mainPage}
                         variant="contained"
                         color="primary">

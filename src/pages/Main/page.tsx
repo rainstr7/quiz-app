@@ -17,14 +17,17 @@ import {
 import ButtonContainer from "../../components/ButtonContainer";
 import {useUnit} from "effector-react";
 import * as model from "./model";
-import {$userName} from "../../entities/quiz";
 
 const MainPage = () => {
-    const helperText = useUnit(model.$helperText);
-    const userName = useUnit($userName);
-    const resetHelperTextEvent = useUnit(model.resetHelperTextEvent);
-    const setHelperTextEvent = useUnit(model.setHelperTextEvent);
-    const submitFormEvent = useUnit(model.submitFormEvent);
+    const resetHelperText = useUnit(model.resetHelperTextEvent);
+    const setHelperText = useUnit(model.setHelperTextEvent);
+    const submitForm = useUnit(model.submitFormEvent);
+    const toggleRememberMe = useUnit(model.toggleRememberMeEvent);
+    const {
+        helperText,
+        userName,
+        userRemember,
+    } = useUnit(model.$formDataStoreCombine);
 
     return (
         <>
@@ -70,7 +73,7 @@ const MainPage = () => {
                         <Box
                             component="form"
                             noValidate
-                            onSubmit={submitFormEvent}
+                            onSubmit={submitForm}
                             sx={{mt: 1}}>
                             <TextField
                                 margin="dense"
@@ -86,8 +89,8 @@ const MainPage = () => {
                                 helperText={helperText}
                                 defaultValue={userName}
                                 onBlur={(event) => event.target.value.trim() ?
-                                    resetHelperTextEvent() :
-                                    setHelperTextEvent("Incorrect user name.")}
+                                    resetHelperText() :
+                                    setHelperText("Incorrect user name.")}
                             />
                             <FormControl fullWidth margin="normal">
                                 <InputLabel id="quiz">Select quiz</InputLabel>
@@ -108,6 +111,8 @@ const MainPage = () => {
                                         color="primary"
                                         id="remember"
                                         name="remember"
+                                        checked={userRemember}
+                                        onChange={toggleRememberMe}
                                     />
                                 }
                                 label="Remember me"

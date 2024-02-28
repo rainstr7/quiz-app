@@ -108,6 +108,13 @@ export const updateQuizDataReducer = (quizSaved: IQuiz | null, quiz: IQuiz) => {
     return quiz
 }
 
+export const toggleRememberMeReducer = (quiz: IQuiz | null, event: React.ChangeEvent<HTMLInputElement>) => {
+    if (quiz) {
+        return ({...quiz, saveSession: event.target.checked})
+    }
+    return quiz
+}
+
 export const addAnswerReducer = (quiz: IQuiz | null, event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isNull(quiz)) {
