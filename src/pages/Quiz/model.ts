@@ -19,6 +19,7 @@ import {
 } from "../../shared/api/quiz";
 import {redirect} from "atomic-router";
 import {TIME_IS_UP} from "../../consts";
+import {configure} from "effector-logger";
 
 export const currentRoute = routes.quiz;
 export const resultsRoute = routes.result;
@@ -133,3 +134,5 @@ export const $lastStepCombine = combine({
     quizExpired: $quizExpired,
     begin: $quizBegin
 })
+
+configure([$timer, getTimeEvent], { log: 'disabled' });
