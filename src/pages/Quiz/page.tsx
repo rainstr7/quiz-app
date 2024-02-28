@@ -15,10 +15,7 @@ import {useUnit} from "effector-react/effector-react.umd";
 import {
     $currentQuestion,
     $isLastStep,
-    $numberOfActiveQuestion,
-    $quizContent,
     $quizName,
-    $scoreQuiz,
     $userName
 } from "../../entities/quiz";
 import React, {useEffect, useMemo} from "react";
@@ -33,6 +30,7 @@ import {formatDuration} from "date-fns";
 import {TIME_IS_UP} from "../../consts";
 import {isNull} from "lodash";
 import {SportsScore} from "@mui/icons-material";
+import {$StepperCombine} from "./model";
 
 const LastStep = () => {
     const resetProgress = useUnit(model.resetProgressEvent);
@@ -110,9 +108,12 @@ const StepContent = () => {
 
 
 const QuizStepper = () => {
-    const numberOfActiveQuestion = useUnit($numberOfActiveQuestion);
-    const content = useUnit($quizContent);
-    const scoreQuiz = useUnit($scoreQuiz);
+    const {
+        content,
+        scoreQuiz,
+        numberOfActiveQuestion
+    } = useUnit($StepperCombine);
+
     const theme = useTheme();
     return (
         <Stepper

@@ -1,6 +1,14 @@
 import {routes} from "../../shared/routing";
 import {combine, createEvent, createStore, sample} from "effector";
-import {$correctAnswers, $quizBegin, $quizExpired, $quizLength, $root} from "../../entities/quiz";
+import {
+    $correctAnswers, $numberOfActiveQuestion,
+    $quizBegin,
+    $quizContent,
+    $quizExpired,
+    $quizLength,
+    $root,
+    $scoreQuiz
+} from "../../entities/quiz";
 import React from "react";
 import {
     addAnswerReducer, getTimeReducer, goToTheLastStepReducer, initialTimerFx,
@@ -111,6 +119,12 @@ redirect({
     clock: saveProgressFx.doneData,
     route: resultsRoute,
 });
+
+export const $StepperCombine = combine({
+    content: $quizContent,
+    scoreQuiz: $scoreQuiz,
+    numberOfActiveQuestion: $numberOfActiveQuestion
+})
 
 export const $lastStepCombine = combine({
     timer: $timer,
