@@ -1,5 +1,5 @@
 import {createEffect} from "effector";
-import {isNull, shuffle, uniqueId} from "lodash";
+import {isNull, round, shuffle, uniqueId} from "lodash";
 import {add, addMinutes, format, formatDuration} from "date-fns";
 import React from "react";
 import {decode, encode} from "js-base64";
@@ -14,6 +14,7 @@ export type ResultType = {
     timer: TimerType;
     begin: Date | null;
     quizExpired: Date | null;
+    quizLength: number;
 }
 
 type OptionType = {
@@ -195,24 +196,27 @@ export const resetProgressReducer = (quiz: IQuiz | null) => {
     return restoredProgress;
 }
 
-export const saveProgressFx = createEffect<ResultType, IHistoryResults, Error>(async ({
-                                                                                          timer,
-                                                                                          score,
-                                                                                          begin,
-                                                                                          quizExpired
-                                                                                      }) => {
+export const saveProgressFx = createEffect<ResultType, IHistoryResults, Error>(async (
+    {
+        timer,
+        score,
+        begin,
+        quizExpired,
+        quizLength
+    }
+) => {
     if (begin && timer) {
         if (timer === TIME_IS_UP) {
             return {
-                score,
+                score: round(score / quizLength, 2),
                 time: `${QUIZ_TIMING} minutes`,
                 date: format(new Date(), 'dd.MM.yyyy HH:mm'),
             }
         }
-        const addDuration = add(begin, timer);
-        const duration = getTimeDuration(quizExpired, addDuration);
+        // const addDuration = add(begin, timer); //TODO
+        const duration = getTimeDuration(quizExpired, begin);
         const restoredProgress: IHistoryResults = {
-            score,
+            score: round(score / quizLength, 2),
             time: formatDuration(duration as Duration, {format: ['minutes', 'seconds']}),
             date: format(new Date(), 'dd.MM.yyyy HH:mm'),
         }
@@ -244,4 +248,26 @@ export const saveResultReducer = ((quiz: IQuiz | null, result: IHistoryResults) 
         return {...quiz, history: [...(quiz?.history ?? []), result]}
     }
     return null;
+});
+
+export type test = {
+    timer: TimerType;
+    begin: Date | null
+}
+
+export const addToBeginDurationFx = createEffect(({timer, begin}: {
+    timer: TimerType;
+    begin: Date | null;
+}) => {
+    if (begin && timer && timer !== TIME_IS_UP) {
+        return add(begin, timer)
+    }
+    return null;
+});
+
+export const addToBeginDurationReducer = ((quiz: IQuiz | null, quizBegin: Date | null) => {
+    if (quiz && quizBegin) {
+        return {...quiz, quizBegin}
+    }
+    return quiz;
 });

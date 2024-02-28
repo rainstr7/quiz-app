@@ -11,11 +11,20 @@ import {
 } from "../../entities/quiz";
 import React from "react";
 import {
-    addAnswerReducer, getTimeReducer, goToTheLastStepReducer, initialTimerFx,
+    addAnswerReducer,
+    addToBeginDurationFx,
+    addToBeginDurationReducer,
+    getTimeReducer,
+    goToTheLastStepReducer,
+    initialTimerFx,
     resetProgressReducer,
-    restoreSavedProgressReducer, restoreSavedTimeReducer, ResultType,
+    restoreSavedProgressReducer,
+    restoreSavedTimeReducer,
     saveProgressBeforeReloadReducer,
-    saveProgressFx, saveResultReducer, saveTimeBeforeReloadReducer, TimerType,
+    saveProgressFx,
+    saveResultReducer,
+    saveTimeBeforeReloadReducer,
+    TimerType,
 } from "../../shared/api/quiz";
 import {redirect} from "atomic-router";
 import {TIME_IS_UP} from "../../consts";
@@ -26,19 +35,20 @@ export const resultsRoute = routes.result;
 export const pageMountedEvent = createEvent("pageMountedEvent QuizPage");
 
 export const nextStepEvent = createEvent<React.FormEvent<HTMLFormElement>>("nextStepEvent");
-export const saveConfigBeforeReloadEvent = createEvent();
-export const restoreSavedProgressEvent = createEvent();
-export const resetProgressEvent = createEvent();
-export const saveProgressEvent = createEvent<ResultType>();
+export const saveConfigBeforeReloadEvent = createEvent("saveConfigBeforeReloadEvent");
+export const restoreSavedProgressEvent = createEvent("restoreSavedProgressEvent");
+export const resetProgressEvent = createEvent("resetProgressEvent");
+export const saveProgressEvent = createEvent("saveProgressEvent");
 
-export const timeIsUpEvent = createEvent();
-export const saveTimeBeforeReloadEvent = createEvent()
-export const restoreSavedTimeEvent = createEvent()
-export const resetTimerEvent = createEvent();
-export const getTimeEvent = createEvent<Date | null>();
+export const timeIsUpEvent = createEvent("timeIsUpEvent");
+export const saveTimeBeforeReloadEvent = createEvent("saveTimeBeforeReloadEvent")
+export const restoreSavedTimeEvent = createEvent("restoreSavedTimeEvent")
+export const resetTimerEvent = createEvent("resetTimerEvent");
+export const getTimeEvent = createEvent<Date | null>("getTimeEvent");
 
-export const saveTimerIdEvent = createEvent<number>();
-export const resetTimerIdEvent = createEvent();
+export const saveTimerIdEvent = createEvent<number>("saveTimerIdEvent");
+export const resetTimerIdEvent = createEvent("resetTimerIdEvent");
+export const addToBeginDurationEvent = createEvent("addToBeginDurationEvent");
 
 export const $loading = createStore<boolean>(false);
 export const $error = createStore<Error | null>(null);
@@ -46,15 +56,15 @@ export const $timer = createStore<TimerType>(null);
 export const $timerId = createStore<number | null>(null);
 
 export const $timeIsUp = $timer.map((time) => time === TIME_IS_UP);
-
+$quizBegin.watch((begin) => console.log('BEGIN QUIZ', begin))
 $root
     .on(nextStepEvent, addAnswerReducer)
     .on(saveConfigBeforeReloadEvent, saveProgressBeforeReloadReducer)
     .on(restoreSavedProgressEvent, restoreSavedProgressReducer)
     .on(resetProgressEvent, resetProgressReducer)
     .on(saveProgressFx.doneData, saveResultReducer)
-    .on(timeIsUpEvent, goToTheLastStepReducer);
-
+    .on(timeIsUpEvent, goToTheLastStepReducer)
+    .on(addToBeginDurationFx.doneData, addToBeginDurationReducer)
 
 $loading
     .on(saveProgressFx.pending, (_, status) => status)
@@ -77,50 +87,6 @@ $timerId
         return null;
     });
 
-sample({
-    clock: pageMountedEvent,
-    target: initialTimerFx
-})
-
-
-sample({
-    clock: saveProgressEvent,
-    target: saveProgressFx
-})
-
-sample({
-    clock: saveProgressFx.doneData,
-    source: $root,
-})
-
-sample({
-    clock: saveProgressFx.pending,
-    fn: () => true,
-    source: $loading
-})
-
-sample({
-    clock: saveProgressFx.failData,
-    fn: () => new Error('something wrong'),
-    source: $error
-})
-
-sample({
-    clock: saveProgressFx.finally,
-    fn: () => false,
-    source: $loading
-})
-
-sample({
-    clock: saveProgressFx.doneData,
-    source: $root,
-})
-
-redirect({
-    clock: saveProgressFx.doneData,
-    route: resultsRoute,
-});
-
 export const $StepperCombine = combine({
     content: $quizContent,
     scoreQuiz: $scoreQuiz,
@@ -135,4 +101,55 @@ export const $lastStepCombine = combine({
     begin: $quizBegin
 })
 
-configure([$timer, getTimeEvent], { log: 'disabled' });
+sample({
+    clock: addToBeginDurationEvent,
+    source: $lastStepCombine,
+    fn: (stepCombine) => ({
+        timer: stepCombine.timer,
+        begin: stepCombine.begin,
+    }),
+    target: addToBeginDurationFx
+})
+
+sample({
+    clock: pageMountedEvent,
+    target: initialTimerFx
+})
+
+sample({
+    clock: saveProgressEvent,
+    source: $lastStepCombine,
+    fn: (stepCombine) => ({
+        timer: stepCombine.timer,
+        score: stepCombine.correctAnswers,
+        begin: stepCombine.begin,
+        quizLength: stepCombine.quizLength,
+        quizExpired: stepCombine.quizExpired
+    }),
+    target: saveProgressFx
+})
+
+sample({
+    clock: [saveProgressFx.pending, addToBeginDurationFx.pending],
+    fn: () => true,
+    source: $loading
+})
+
+sample({
+    clock: [saveProgressFx.failData,  addToBeginDurationFx.failData],
+    fn: () => new Error('something wrong'),
+    source: $error
+})
+
+sample({
+    clock: [saveProgressFx.finally, addToBeginDurationFx.finally],
+    fn: () => false,
+    source: $loading
+})
+
+redirect({
+    clock: saveProgressFx.done,
+    route: resultsRoute,
+});
+
+configure([$timer, getTimeEvent], {log: 'disabled'});

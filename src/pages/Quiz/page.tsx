@@ -36,15 +36,13 @@ const LastStep = () => {
     const resetProgress = useUnit(model.resetProgressEvent);
     const resetTimer = useUnit(model.resetTimerEvent);
     const saveTimeBeforeReload = useUnit(model.saveTimeBeforeReloadEvent);
-    const saveProgressEvent = useUnit(model.saveProgressEvent);
+    const saveProgress = useUnit(model.saveProgressEvent);
     const resetTimerId = useUnit(model.resetTimerIdEvent);
     const restoreSavedTimer = useUnit(model.restoreSavedTimeEvent);
+    const addToBeginDuration = useUnit(model.addToBeginDurationEvent);
     const {
-        timer,
         correctAnswers,
         quizLength,
-        quizExpired,
-        begin
     } = useUnit(model.$lastStepCombine);
 
     useBeforeunload(saveTimeBeforeReload);
@@ -53,6 +51,7 @@ const LastStep = () => {
         resetProgress();
         resetTimer();
     }
+
     const label = useMemo(() => {
         const [color, message] = getColorAndMessage(correctAnswers / quizLength);
         return (
@@ -71,6 +70,7 @@ const LastStep = () => {
     }, [correctAnswers, quizLength])
 
     useEffect(() => {
+        addToBeginDuration();
         resetTimerId();
         restoreSavedTimer();
     }, [])
@@ -86,7 +86,7 @@ const LastStep = () => {
                     variant="contained"
                     color="primary"
                     id='save_button'
-                    onClick={() => saveProgressEvent({score: correctAnswers / quizLength, begin, quizExpired, timer})}
+                    onClick={() => saveProgress()}
                 >
                     Save results
                 </Button>
