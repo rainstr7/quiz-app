@@ -29,6 +29,7 @@ import {
 import {redirect} from "atomic-router";
 import {TIME_IS_UP} from "../../consts";
 import {configure} from "effector-logger";
+import {isNull} from "lodash";
 
 export const currentRoute = routes.quiz;
 export const resultsRoute = routes.result;
@@ -56,7 +57,7 @@ export const $timer = createStore<TimerType>(null);
 export const $timerId = createStore<number | null>(null);
 
 export const $timeIsUp = $timer.map((time) => time === TIME_IS_UP);
-$quizBegin.watch((begin) => console.log('BEGIN QUIZ', begin))
+
 $root
     .on(nextStepEvent, addAnswerReducer)
     .on(saveConfigBeforeReloadEvent, saveProgressBeforeReloadReducer)
@@ -108,6 +109,9 @@ sample({
         timer: stepCombine.timer,
         begin: stepCombine.begin,
     }),
+    filter: ({timer, begin}) => (
+        !isNull(begin) && !isNull(timer) && timer !== TIME_IS_UP
+    ),
     target: addToBeginDurationFx
 })
 

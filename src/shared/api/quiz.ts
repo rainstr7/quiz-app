@@ -250,20 +250,10 @@ export const saveResultReducer = ((quiz: IQuiz | null, result: IHistoryResults) 
     return null;
 });
 
-export type test = {
-    timer: TimerType;
-    begin: Date | null
-}
-
 export const addToBeginDurationFx = createEffect(({timer, begin}: {
     timer: TimerType;
     begin: Date | null;
-}) => {
-    if (begin && timer && timer !== TIME_IS_UP) {
-        return add(begin, timer)
-    }
-    return null;
-});
+}) => add(begin as Date, timer as Duration));
 
 export const addToBeginDurationReducer = ((quiz: IQuiz | null, quizBegin: Date | null) => {
     if (quiz && quizBegin) {
